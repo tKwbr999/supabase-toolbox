@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"] // Node.jsの型定義を有効にする
+  },
+  "include": [
+    "supabase/functions/**/*.ts" // 対象ファイルを指定
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
