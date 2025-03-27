@@ -6,7 +6,7 @@ dotenv.config();
 
 // Supabase Anon Keyを環境変数から取得
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-const FUNCTION_URL = 'http://localhost:54321/functions/v1/hello-world';
+const FUNCTION_URL = process.env.SUPABASE_FUNCTION_URL || 'http://localhost:54321/functions/v1/hello-world';
 
 // 環境変数が設定されていない場合はエラーをスロー
 if (!SUPABASE_ANON_KEY) {
