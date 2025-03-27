@@ -85,7 +85,7 @@
 2.  Node.js 環境をセットアップします。
 3.  プロジェクトの依存関係をインストールします (`npm ci`)。
 4.  Playwright のブラウザをインストールします (`npx playwright install --with-deps`)。
-5.  Supabase CLI をインストールします (`npm install -g supabase`)。
+5.  `supabase/setup-cli` アクションを使用して Supabase CLI をセットアップします。
 6.  ローカルの Supabase 環境を起動します (`supabase start`)。
 7.  テストを実行します (`npm test`)。
     *   テストに必要な `SUPABASE_ANON_KEY` は、リポジトリの Secrets (`secrets.SUPABASE_ANON_KEY`) から取得されます。ローカル Supabase 環境のデフォルトの Anon Key を設定してください。
