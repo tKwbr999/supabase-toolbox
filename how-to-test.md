@@ -75,11 +75,11 @@
 
 ## 3. GitHub Actions でのテスト
 
-このリポジトリでは、`main` ブランチへの push または pull request がトリガーとなり、GitHub Actions 上で自動的にテストが実行されます。
+このリポジトリでは、`main` ブランチへの push がトリガーとなり、GitHub Actions 上で自動的にテストが実行され、テストが成功すると自動でデプロイが行われます。Pull request 時はテストのみが実行されます。
 
 ### ワークフロー
 
-テストのワークフローは `.github/workflows/test.yml` で定義されています。主なステップは以下の通りです。
+ワークフローは `.github/workflows/test.yml` で定義されています。主なステップは以下の通りです。
 
 1.  リポジトリのコードをチェックアウトします。
 2.  Node.js 環境をセットアップします。
@@ -90,16 +90,31 @@
 7.  テストを実行します (`npm test`)。
     *   テストに必要な `SUPABASE_ANON_KEY` は、リポジトリの Secrets (`secrets.SUPABASE_ANON_KEY`) から取得されます。ローカル Supabase 環境のデフォルトの Anon Key を設定してください。
     *   テスト対象の URL は、`supabase start` で起動したローカル環境の Functions URL (`http://127.0.0.1:54321/functions/v1/hello-world`) が自動的に使用されます。
-8.  Supabase 環境を停止します (`supabase stop`)。
+8.  **(`main` ブランチへの push 時のみ) テストが成功した場合、`hello-world` 関数を Supabase にデプロイします (`supabase functions deploy hello-world`)。**
+    *   デプロイには `SUPABASE_ACCESS_TOKEN` と `SUPABASE_PROJECT_ID` の Secrets が必要です。
+9.  Supabase 環境を停止します (`supabase stop`)。
 
 ### Secrets の設定
 
-GitHub Actions でテストを実行するには、リポジトリに `SUPABASE_ANON_KEY` という名前の Secret を設定する必要があります。
+GitHub Actions でテストとデプロイを実行するには、リポジトリに以下の Secrets を設定する必要があります。
+
+1.  **`SUPABASE_ANON_KEY`**:
+    *   **目的**: ローカル環境でのテスト実行時に使用されます。
+    *   **値**: ローカルの Supabase 環境で使用されるデフォルトの Anon Key。通常、`supabase start` を実行した際にターミナルに出力される `anon key` です。不明な場合は、`supabase status` コマンドでも確認できます。
+2.  **`SUPABASE_ACCESS_TOKEN`**:
+    *   **目的**: Supabase Functions のデプロイ時に認証で使用されます。
+    *   **値**: Supabase のアクセストークン。Supabase ダッシュボードの **Account** > **Access Tokens** で生成できます。**New token** をクリックし、適切な名前（例: `GITHUB_ACTIONS_DEPLOY`）を付けて生成してください。
+3.  **`SUPABASE_PROJECT_ID`**:
+    *   **目的**: デプロイ先の Supabase プロジェクトを指定するために使用されます。
+    *   **値**: Supabase プロジェクトの ID。Supabase ダッシュボードのプロジェクト設定 > General settings で確認できます。
+
+**設定手順:**
 
 1.  GitHub リポジトリの **Settings** > **Secrets and variables** > **Actions** に移動します。
 2.  **New repository secret** をクリックします。
-3.  **Name** に `SUPABASE_ANON_KEY` と入力します。
-4.  **Secret** に、ローカルの Supabase 環境で使用されるデフォルトの Anon Key を貼り付けます。通常、`supabase start` を実行した際にターミナルに出力される `anon key` です。不明な場合は、`supabase status` コマンドでも確認できます。
+3.  上記の Secret 名（例: `SUPABASE_ANON_KEY`）を **Name** に入力します。
+4.  対応する値を **Secret** に貼り付けます。
 5.  **Add secret** をクリックします。
+6.  他の必要な Secret についても同様の手順を繰り返します。
 
-これで、GitHub Actions でテストが実行される際に、この Secret が `SUPABASE_ANON_KEY` 環境変数としてテストスクリプトに渡されます。
+これで、GitHub Actions でテストとデプロイが実行される際に、これらの Secrets が環境変数としてワークフローに渡されます。

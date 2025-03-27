@@ -1,13 +1,11 @@
-name: Run Tests
+name: Test and Deploy
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ main ] # mainブランチへのpush時のみ実行
 
 jobs:
-  test:
+  test_and_deploy: # ジョブ名を変更
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +15,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20' # プロジェクトで使用しているNode.jsのバージョンに合わせてください
+        node-version: '20' # プロジェクトで使用しているNode.jsのバージョン
         cache: 'npm'
 
     - name: Install dependencies
@@ -36,11 +34,18 @@ jobs:
 
     - name: Run tests
       env:
-        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        # GitHub Actions環境ではSupabase CLIがデフォルトで起動するURLを使用
-        # 必要に応じてテストコード側で環境変数からURLを読み込むように修正
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }} # ローカルテスト用のAnon Key
       run: npm test
 
+    # mainブランチへのpush時のみデプロイを実行
+    - name: Deploy to Supabase
+      if: github.ref == 'refs/heads/main'
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }} # Supabaseアクセストークン
+        SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}   # SupabaseプロジェクトID
+      # 特定の関数 'hello-world' をデプロイ
+      run: supabase functions deploy hello-world --project-ref $SUPABASE_PROJECT_ID
+
     - name: Stop Supabase services
-      if: always() # テストが失敗しても必ず実行する
+      if: always() # テストやデプロイが失敗しても必ず実行する
       run: supabase stop
