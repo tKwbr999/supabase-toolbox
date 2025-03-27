@@ -1,5 +1,17 @@
 # Supabase Edge Function 開発・テスト・デプロイ手順
 
+## 技術スタック
+
+*   Node.js
+*   npm
+*   Supabase CLI
+*   Docker
+*   TypeScript
+*   Playwright
+*   dotenv
+*   Deno
+*   GitHub Actions
+
 このドキュメントは、Supabase Edge Function の開発からテスト、デプロイまでの一連の手順をまとめた汎用的なガイドです。
 
 ## 1. 前提条件
