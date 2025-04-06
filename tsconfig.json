@@ -12,7 +12,5 @@
   "include": [
     "supabase/functions/**/*.ts" // 対象ファイルを指定
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

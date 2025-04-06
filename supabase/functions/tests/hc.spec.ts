@@ -6,8 +6,7 @@ dotenv.config();
 
 // Supabase Anon Keyを環境変数から取得
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-const FUNCTION_URL =
-  process.env.SUPABASE_FUNCTION_URL || 'http://localhost:54321/functions/v1/hello-world';
+const FUNCTION_URL = process.env.SUPABASE_FUNCTION_URL || 'http://localhost:54321/functions/v1/hc';
 
 // 環境変数が設定されていない場合はエラーをスロー
 if (!SUPABASE_ANON_KEY) {
@@ -16,7 +15,7 @@ if (!SUPABASE_ANON_KEY) {
   );
 }
 
-test('hello-world function should return a greeting', async ({ request }) => {
+test('hc function should return a greeting', async ({ request }) => {
   const name = 'Playwright';
   const response = await request.post(FUNCTION_URL, {
     headers: {
@@ -31,5 +30,5 @@ test('hello-world function should return a greeting', async ({ request }) => {
 
   // レスポンスボディを確認
   const responseBody = await response.json();
-  expect(responseBody).toEqual({ message: `Hello ${name}!` });
+  expect(responseBody).toEqual({ message: `ok` });
 });

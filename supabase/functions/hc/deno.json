@@ -1,0 +1,28 @@
+{
+  "tasks": {
+    "start": "deno run --allow-net --allow-read --allow-env index.ts",
+    "dev": "deno run --watch --allow-net --allow-read --allow-env index.ts",
+    "test": "deno test --allow-read --allow-env"
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.210.0/"
+  },
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["deno.window"],
+    "strict": true
+  },
+  "lint": {
+    "include": ["*.ts"],
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "fmt": {
+    "include": ["*.ts"],
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "semiColons": true,
+    "singleQuote": false
+  }
+}

@@ -1,8 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
+import path from 'path'; // path モジュールをインポート
 
-// .envファイルを読み込む
-dotenv.config();
+// .envファイルを読み込む (プロジェクトルートの .env を明示的に指定)
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 // テスト対象のエンドポイントを環境変数から取得
 const testTarget = process.env.TEST_TARGET || 'local'; // デフォルトはlocal
